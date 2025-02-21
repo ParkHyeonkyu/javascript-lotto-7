@@ -36,6 +36,19 @@ class Lotto {
   getNumbers() {
     return [...this.#numbers].sort((a, b) => a - b);
   }
+
+  static validateWinningNumbers(numbers) {
+    if (numbers.length !== 6) {
+      throw new Error("[ERROR] 당첨 번호는 6개여야 합니다.");
+    }
+    return new Lotto(numbers);
+  }
+
+  static validateBonusNumber(number) {
+    if (number < 1 || number > 45 || isNaN(number)) {
+      throw new Error("[ERROR] 보너스 번호는 1부터 45 사이의 숫자여야 합니다.");
+    }
+  }
 }
 
 export default Lotto;

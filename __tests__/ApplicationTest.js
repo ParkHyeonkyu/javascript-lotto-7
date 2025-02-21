@@ -13,9 +13,9 @@ const mockQuestions = (inputs) => {
 
 const mockRandoms = (numbers) => {
   MissionUtils.Random.pickUniqueNumbersInRange = jest.fn();
-  numbers.reduce((acc, number) => {
-    return acc.mockReturnValueOnce(number);
-  }, MissionUtils.Random.pickUniqueNumbersInRange);
+  numbers.forEach((number) => {
+    MissionUtils.Random.pickUniqueNumbersInRange.mockReturnValueOnce(number);
+  });
 };
 
 const getLogSpy = () => {
@@ -51,7 +51,7 @@ describe("로또 테스트", () => {
     // given
     const logSpy = getLogSpy();
 
-    mockRandoms([
+    const expectedLottos = [
       [8, 21, 23, 41, 42, 43],
       [3, 5, 11, 16, 32, 38],
       [7, 11, 16, 35, 36, 44],
@@ -60,7 +60,9 @@ describe("로또 테스트", () => {
       [7, 11, 30, 40, 42, 43],
       [2, 13, 22, 32, 38, 45],
       [1, 3, 5, 14, 22, 45],
-    ]);
+    ];
+
+    mockRandoms(expectedLottos);
     mockQuestions(["8000", "1,2,3,4,5,6", "7"]);
 
     // when
@@ -91,7 +93,19 @@ describe("로또 테스트", () => {
     });
   });
 
-  test("예외 테스트", async () => {
+  test("예외 테스트 - 잘못된 입력", async () => {
     await runException("1000j");
+  });
+
+  test("예외 테스트 - 1000원 단위로 입력하지 않음", async () => {
+    await runException("2000");
+  });
+
+  test("예외 테스트 - 당첨 번호 잘못된 형식", async () => {
+    await runException("1,2,3,4,5,6,7");
+  });
+
+  test("예외 테스트 - 보너스 번호 잘못된 형식", async () => {
+    await runException("46");
   });
 });
