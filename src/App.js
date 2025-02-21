@@ -56,14 +56,10 @@ class App {
     return bonusNumber;
   }
 
-  printLottoNumbers(lottos) {
-    lottos.forEach(lotto => Console.print(lotto.getNumbers()));
-  }
-
   printLottoPurchaseDetails(lottoCount, lottos) {
     Console.print(`${lottoCount}개를 구매했습니다.`);
-    this.printLottoNumbers(lottos);
-  }
+    lottos.forEach(lotto => Console.print(`[${lotto.getNumbers().join(", ")}]`));
+  }  
 
   printResultsAndRevenueRate(purchaseAmount, lottos, winningNumbers, bonusNumber) {
     const result = PrizeChecker.checkResults(lottos, winningNumbers, bonusNumber);
