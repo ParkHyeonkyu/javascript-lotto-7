@@ -1,4 +1,5 @@
-import { Console } from "@woowacourse/mission-utils"
+import { Console, Random } from "@woowacourse/mission-utils"
+import Lotto from "./Lotto.js";
 
 class App {
   async run() {
@@ -6,7 +7,12 @@ class App {
       const purchaseAmount = await this.getPurchaseAmount();
       const lottoCount = purchaseAmount / 1000;
 
+      const lottos = this.generateLottos(lottoCount);
+
       Console.print(`${lottoCount}개를 구매했습니다.`);
+      lottos.forEach(lotto => {
+        Console.print(lotto.getNumbers());
+      });
 
     } catch (error) {
       Console.print(error.message);
@@ -20,6 +26,15 @@ class App {
       throw new Error("[ERROR] 천 원 단위로 입력해야 합니다.");
     }
     return amount;
+  }
+
+  generateLottos(lottoCount) {
+    const lottos = [];
+    for (let i = 0; i < lottoCount; i++) {
+      const numbers = Random.pickUniqueNumbersInRange(1,45,6);
+      lottos.push(new Lotto(numbers));
+    }
+    return lottos;
   }
 }
 
